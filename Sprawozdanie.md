@@ -1,56 +1,53 @@
-# Bionformatyka
-
-
+# Bioinformatyka
+ 
+ 
 ## Wykonane przez:
 ```
 Denys Hromniuk 141232
-
+ 
 Pavlo Ravliv 135412
 ```
 ## Wybrany problem:
 ```
-Klasyczny problem SBH z błędami negatywnymi obu typów.
+Problem SBH z informacją o położeniu oraz wszystkimi rodzajami błędów.
 ```
-
-
-## Algorytm zachlanny
-
-Dostajemy odczytywane DNA , dzilemy na oligonukleotydy o zadanej dlugosci  -> szuflujemy je
-
-
-Dzialanie algorytmu zachlannego
-Skoro wiemy ktory oligonukleotyd jest poczatkowy to od niego zaczynamy
+ 
+ 
+## Algorytm zachłanny
+ 
+Dostajemy odczytywane DNA,
+ 
+ dzielmy na oligonukleotydy o zadanej długości  -> szuflujemy je
+ 
+ 
+Działanie algorytmu zachłannego
+skoro wiemy, który oligonukleotyd jest początkowy to od niego zaczynamy
 ```typescript
 function greedy(firstOligonucletotide , allOligonucleotides[],resultLenght): result
-  dodajemy do result nasz firstOligonucleotide
-  currentOligoNucleotide = firstNucleotide
-  while currentOligoNuclotide oraz len(result) <= resultLength  ma sasiedztwo
-    wybierz luk o najwyzszej wadze i dodaj do result
-    currentOligoNucleotide = nextOligoNucleotide
+ dodajemy do result nasz firstOligonucleotide
+ currentOligoNucleotide = firstNucleotide
+ while currentOligoNuclotide oraz len(result) <= resultLength  ma sasiedztwo
+   wybierz luk o najwyzszej wadze i dodaj do result
+   currentOligoNucleotide = nextOligoNucleotide
 ```
-
-## Algorytm:
-
-> Aspiration criteria - kryterium ktore jest evaluowane jako `True` w przypadku jesli pod czas danej iteracji dostajemy liepsze rozwiazanie od najlipeszego wczesniejszego i znajduje sie na liscie Tabu
-
-> Jako warunek stopu wybralismy liczbe iteracij
-
-> Tabu tenure - lista tabu jako ktora zawiera zabronione przeksztalcenia oligonukletydow
-
-
-0. W zerowym kroku generujemy poczatkowe rozwiazanie za pomoca algrotymu zachlannego
-
-1. Generujemy otoczenie $S$ . Otoczenie $S$ jest generowane za pomoca funkcji :
- ```kotlin 
- fun generateNegihbourhood(solution) : neighbourhood[]{
-   1. Wybieramy losowy oligonukleotyd
-   2. Szkumay oligonukleotyd ktory ma najnmniesz nalozenie z sasiadem z lewej strony i z sasiadem z prawj strony.
-   3. Zamieniamy oligonukleotyd z kroku `1` z oligonukleotydem z kroku `2` lub wymieniamy oligonukleotyd z kroku `2` lub losujemy inny oligonukleotyd jesli sie nie da je zamienic miejscami
- }
-  ```
-
-2. Z posrod otoczenise wybieramy rozwiazanie dopuszczalne  i sprawdzamy czy jest liepsze od wczesniej otrzymanego rozwiazania
-czyli sprawdzamy if(tabu && !aspirationCriteria) to odrzucamy to rozwiazanie odrazu 
-if(tabu && aspirationCriteria) to robimy wyjatek jesli nowe wygenerowane rozwiazanie jest liepsze od wczesniej otrzymanego rozwiazania
-3. Sprawdzamy czy warunek stopu jest evaluovany jako `True` jesli jest `True` to konczymy obliczanie w przeciwnym przypadku przechodzimy do kroku `4`
-4.  Aktualizujemy nasza liste tabu(tabu tenure) i przechodzimy do kroku `1`
+ 
+## Algorytm Heurystyczny:
+ 
+> Jako warunek stopu wybralismy jesli wynnik sie nie poliepsza przez N iteracji
+ 
+ 
+0. W zerowym kroku generujemy początkowe rozwiązanie za pomocą algrotymu zachlannego
+While not warunek stop
+1. Dla wszystkich osobników z populacji krzyżujemy jeden osobnik z pozostałymi.
+> Krzyzowanie(solution1,solution2) :
+ 
+Polega na:
+> L -> [A |B C D ] <- P
+>
+> L -> [C |B D A ] <- P
+>
+> Dzielimy solution1 i solution2 na dwie czesci i zostawiamy czesc L z solution1  oraz czesc P z solution2 i dostajemy potomka1 (solution1(L),solution2(P)) oraz drugi pomtek2(solution1(P),solution2(L))
+>
+2. W dwóch wybranych potomkach pewnego losowego rozwiązania robimy mutacje polegające na losowej wymianie dwóch oligonukleotydow
+3. Po krosowaniu zostawiamy populacje w dopuszczalnych granicach i osobniki z niskimi wartościami są zastępowane przez potomków osobników z wysokimi wartosciami
+4. Powtarzamy proces generowania nowych osobników i mutacji potomków do tej pory aż warunek stopu nie zostanie spelniony

@@ -42,6 +42,8 @@
     ]
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.168"
+    "@types/lodash": "^4.14.168",
+    "eslint": "^7.25.0",
+    "eslint-plugin-unicorn": "^31.0.0"
   }
 }
